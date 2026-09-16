@@ -14,11 +14,14 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  PAGES_BASE: /maker-project-tracker/
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -27,22 +30,41 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build static site
+      # Build the normal SSR bundle as a plain Node server. The static
+      # presets of Nitro 3 beta do not work with this Vite 8 / rolldown setup,
+      # so we render the page ourselves in the next step.
+      - name: Build
         env:
-          NITRO_PRESET: static
-          SERVER_PRESET: static
-          PAGES_BASE: /maker-project-tracker/
+          NITRO_PRESET: node-server
+          SERVER_PRESET: node-server
         run: bun run build
 
-      - name: Prepare output for Pages
+      - name: Render static HTML from the SSR server
         run: |
-          ls -la .output/public
-          touch .output/public/.nojekyll
-          cp .output/public/index.html .output/public/404.html || true
+          set -e
+          ls -R .output | head -50
+          node .output/server/index.mjs &
+          SERVER_PID=$!
+          OK=0
+          for i in $(seq 1 40); do
+            if curl -sf "http://127.0.0.1:3000${PAGES_BASE}" -o /tmp/index.html; then OK=1; break; fi
+            if curl -sf "http://127.0.0.1:3000/" -o /tmp/index.html; then OK=1; break; fi
+            sleep 1
+          done
+          kill $SERVER_PID || true
+          if [ "$OK" != "1" ]; then echo "Could not render the page"; exit 1; fi
+          mkdir -p dist
+          cp -r .output/public/. dist/
+          cp /tmp/index.html dist/index.html
+          cp /tmp/index.html dist/404.html
+          touch dist/.nojekyll
+          echo "--- dist ---"
+          ls -la dist
+          head -c 400 dist/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: dist
 
   deploy:
     needs: build
