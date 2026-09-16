@@ -1,14 +1,44 @@
 // ============================================================
 // EDITE ESTE ARQUIVO PARA ATUALIZAR O SITE
-// Todos os textos, valores e seções ficam aqui.
+// Todos os textos, integrantes, etapas, materiais e links
+// ficam centralizados aqui — não é preciso mexer no layout.
 // ============================================================
 
+// ---------- Identidade ----------
 export const identidade = {
   nomeFantasia: "AirGuard",
   nomeGrupo: "Grupo 03",
   subtitulo:
-    "Monitor de qualidade do ar com exaustão automática — detecta gás, fumaça e calor, liga a exaustão sozinho e dispara alarme sonoro e visual.",
+    "Monitor de qualidade do ar com exaustão automática: detecta gás, fumaça e calor no ambiente, liga a exaustão sozinho e dispara alarme sonoro e visual.",
   disciplina: "Feira de Projetos • Engenharia • 2026",
+};
+
+// ---------- Números de destaque do Hero ----------
+export const destaques = [
+  { valor: "3", rotulo: "sensores" },
+  { valor: "ESP32", rotulo: "processamento" },
+  { valor: "4", rotulo: "saídas" },
+  { valor: "6", rotulo: "etapas" },
+];
+
+// ---------- Painel simulado do dispositivo (valores estáticos) ----------
+export const painel = {
+  aqi: 42,
+  aqiRotulo: "Boa",
+  temperatura: "26,4 °C",
+  umidade: "58 %",
+  ventoinha: "Desligada",
+  alarme: "Normal",
+};
+
+// ---------- Proposta ----------
+export const proposta = {
+  problema:
+    "Vazamentos de gás, fumaça e calor excessivo em ambientes fechados passam despercebidos até se tornarem perigosos, causando intoxicações, incêndios e perdas materiais.",
+  solucao:
+    "Um monitor embarcado de baixo custo que mede continuamente gás, fumaça, temperatura e umidade, acionando automaticamente a exaustão e alertas sonoros e visuais ao detectar risco.",
+  resultado:
+    "Ambientes mais seguros com resposta imediata a incidentes, reduzindo riscos à saúde e ao patrimônio — tudo por menos de R$ 200 em componentes.",
 };
 
 export const aplicacoes = [
@@ -29,6 +59,24 @@ export const aplicacoes = [
   },
 ];
 
+// ---------- Equipe ----------
+// Para usar uma foto real, adicione o campo `foto: "https://..."` no
+// integrante e, no componente Equipe.tsx, troque o avatar de iniciais por:
+//   <img src={p.foto} alt={p.nome} className="size-16 rounded-full object-cover" />
+export type Integrante = {
+  nome: string;
+  funcao: string;
+  foto?: string;
+};
+
+export const equipe: Integrante[] = [
+  { nome: "Ana Ribeiro", funcao: "Coordenação e documentação" },
+  { nome: "Bruno Salgado", funcao: "Eletrônica e sensores" },
+  { nome: "Carla Menezes", funcao: "Firmware do ESP32" },
+  { nome: "Diego Alves", funcao: "Atuadores e montagem" },
+];
+
+// ---------- Arquitetura técnica ----------
 export const arquitetura = [
   {
     etiqueta: "Entrada",
@@ -64,6 +112,64 @@ export const arquitetura = [
   },
 ];
 
+// ---------- Etapas do projeto ----------
+// status: "concluida" | "andamento" | "planejada"
+export type Etapa = {
+  numero: string;
+  titulo: string;
+  data?: string;
+  status: "concluida" | "andamento" | "planejada";
+  resumo: string;
+  checklist?: { item: string; feito: boolean }[];
+};
+
+export const etapas: Etapa[] = [
+  {
+    numero: "01",
+    titulo: "Identificação e proposta",
+    data: "09/09/2026",
+    status: "concluida",
+    resumo: "Definição do grupo, nome fantasia e proposta do projeto.",
+    checklist: [
+      { item: "Nome do grupo definido", feito: true },
+      { item: "Nome fantasia escolhido", feito: true },
+      { item: "Nome e fotos dos integrantes", feito: true },
+      { item: "Proposta publicada no site", feito: true },
+    ],
+  },
+  {
+    numero: "02",
+    titulo: "Levantamento técnico",
+    status: "andamento",
+    resumo: "Pesquisa de sensores, atuadores e levantamento de custos.",
+  },
+  {
+    numero: "03",
+    titulo: "Projeto eletrônico e esquemático",
+    status: "planejada",
+    resumo: "Diagrama de blocos, esquema elétrico e lista final de materiais.",
+  },
+  {
+    numero: "04",
+    titulo: "Firmware e interface",
+    status: "planejada",
+    resumo: "Programação do ESP32, lógica de decisão e servidor web local.",
+  },
+  {
+    numero: "05",
+    titulo: "Protótipo e testes",
+    status: "planejada",
+    resumo: "Montagem em bancada, calibração e ensaios funcionais.",
+  },
+  {
+    numero: "06",
+    titulo: "Apresentação na feira",
+    status: "planejada",
+    resumo: "Documentação final, banner e demonstração para a banca.",
+  },
+];
+
+// ---------- Lista de materiais ----------
 export type Material = {
   componente: string;
   funcao: string;
@@ -87,3 +193,20 @@ export const totalMateriais = materiais.reduce((s, m) => s + m.custo * m.quantid
 export function moeda(valor: number) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 }
+
+// ---------- Documentação (substitua os links "#" pelos arquivos reais) ----------
+export const documentos = [
+  { titulo: "Proposta em PDF", descricao: "Documento completo da proposta do projeto.", href: "#" },
+  { titulo: "Esquema elétrico", descricao: "Diagrama de ligações e pinagem do ESP32.", href: "#" },
+  { titulo: "Código-fonte", descricao: "Repositório com o firmware do projeto.", href: "#" },
+];
+
+// ---------- Navegação ----------
+export const navLinks = [
+  { href: "#proposta", label: "Proposta" },
+  { href: "#grupo", label: "Grupo" },
+  { href: "#arquitetura", label: "Arquitetura" },
+  { href: "#etapas", label: "Etapas" },
+  { href: "#materiais", label: "Materiais" },
+  { href: "#documentacao", label: "Documentação" },
+];
