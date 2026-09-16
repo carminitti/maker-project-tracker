@@ -20,6 +20,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
 
@@ -30,9 +31,8 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # Build the normal SSR bundle as a plain Node server. The static
-      # presets of Nitro 3 beta do not work with this Vite 8 / rolldown setup,
-      # so we render the page ourselves in the next step.
+      # The static presets of Nitro 3 beta break with this Vite 8 / rolldown
+      # setup, so we build a plain Node server and render the HTML ourselves.
       - name: Build
         env:
           NITRO_PRESET: node-server
@@ -40,25 +40,27 @@ jobs:
         run: bun run build
 
       - name: Render static HTML from the SSR server
+        timeout-minutes: 3
         run: |
-          set -e
-          ls -R .output | head -50
-          node .output/server/index.mjs &
-          SERVER_PID=$!
+          set -x
+          # Detach the server completely so the step is never held open by it.
+          nohup node .output/server/index.mjs > /tmp/server.log 2>&1 < /dev/null &
+          echo $! > /tmp/server.pid
           OK=0
-          for i in $(seq 1 40); do
+          for i in $(seq 1 30); do
             if curl -sf "http://127.0.0.1:3000${PAGES_BASE}" -o /tmp/index.html; then OK=1; break; fi
             if curl -sf "http://127.0.0.1:3000/" -o /tmp/index.html; then OK=1; break; fi
             sleep 1
           done
-          kill $SERVER_PID || true
+          kill -9 "$(cat /tmp/server.pid)" 2>/dev/null || true
+          echo "--- server log ---"
+          cat /tmp/server.log || true
           if [ "$OK" != "1" ]; then echo "Could not render the page"; exit 1; fi
           mkdir -p dist
           cp -r .output/public/. dist/
           cp /tmp/index.html dist/index.html
           cp /tmp/index.html dist/404.html
           touch dist/.nojekyll
-          echo "--- dist ---"
           ls -la dist
           head -c 400 dist/index.html
 
