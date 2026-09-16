@@ -3,7 +3,7 @@ import { destaques, identidade, painel } from "@/data/projeto";
 
 export function Hero() {
   return (
-    <section id="topo" className="dark relative overflow-hidden border-b border-border bg-background">
+    <section id="topo" className="dark relative overflow-hidden border-b border-border bg-background text-foreground">
       <div className="absolute inset-0 grid-tech opacity-50" aria-hidden="true" />
       <div className="absolute inset-0 glow-hero" aria-hidden="true" />
 

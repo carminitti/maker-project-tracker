@@ -3,7 +3,7 @@ import { equipe, identidade, navLinks } from "@/data/projeto";
 
 export function SiteFooter() {
   return (
-    <footer className="dark border-t border-border bg-background">
+    <footer className="dark border-t border-border bg-background text-foreground">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <div className="flex items-center gap-3">
