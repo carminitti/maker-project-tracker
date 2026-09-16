@@ -60,20 +60,36 @@ export const aplicacoes = [
 ];
 
 // ---------- Equipe ----------
-// Para usar uma foto real, adicione o campo `foto: "https://..."` no
-// integrante e, no componente Equipe.tsx, troque o avatar de iniciais por:
-//   <img src={p.foto} alt={p.nome} className="size-16 rounded-full object-cover" />
+// Para usar uma foto real, adicione o campo foto: "https://..." no
+// integrante. O e-mail aparece como link mailto no card.
 export type Integrante = {
   nome: string;
   funcao: string;
+  email?: string;
   foto?: string;
 };
 
 export const equipe: Integrante[] = [
-  { nome: "Ana Ribeiro", funcao: "Coordenação e documentação" },
-  { nome: "Bruno Salgado", funcao: "Eletrônica e sensores" },
-  { nome: "Carla Menezes", funcao: "Firmware do ESP32" },
-  { nome: "Diego Alves", funcao: "Atuadores e montagem" },
+  {
+    nome: "Pedro Bueno Vieira Lopes Dias",
+    funcao: "Coordenação e documentação",
+    email: "pedro.bueno.dias@mail.usf.edu.br",
+  },
+  {
+    nome: "Rafael Bueno Vieira Lopes Dias",
+    funcao: "Eletrônica e sensores",
+    email: "rafael.bueno.dias@mail.usf.edu.br",
+  },
+  {
+    nome: "Thiago Vieira dos Reis",
+    funcao: "Firmware do ESP32",
+    email: "thiago.vieira.reis@mail.usf.edu.br",
+  },
+  {
+    nome: "Gabriel Zini Carminitti",
+    funcao: "Atuadores e montagem",
+    email: "gabriel.carminitti@mail.usf.edu.br",
+  },
 ];
 
 // ---------- Arquitetura técnica ----------
